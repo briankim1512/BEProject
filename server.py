@@ -10,12 +10,13 @@ from flask import Flask, render_template, abort,\
 # Create a SQL session
 engine = create_engine('sqlite:///itemcat.db')
 Base.metadata.bind = engine
-DBSession = sessionmaker(bind = engine)
+DBSession = sessionmaker(bind=engine)
 session = DBSession()
 # print("Created an engine")
 
 # Initialization for Flask server
 app = Flask(__name__)
+
 
 @app.route('/')
 def hello_world():
@@ -23,4 +24,4 @@ def hello_world():
 
 if __name__ == '__main__':
 	app.debug = True
-	app.run(host = '0.0.0.0', port = 8000)
+    app.run(host='0.0.0.0', port=8000)
