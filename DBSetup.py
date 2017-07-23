@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+
 # Create a table for the database
 class ItemCat(Base):
     __tablename__ = 'itemCat'
