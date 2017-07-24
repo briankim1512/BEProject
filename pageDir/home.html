@@ -10,11 +10,17 @@
             <a href="#"><button id="login">LOGIN</button></a>
         </header>
         <aside>
+            <h2>Categories</h2>
             {% for i in categories %}
-            <h3>{{ i[0] }}({{ i[1] }})</h3>
+            <h4 class="itemCate">{{ i[0] }}({{ i[1] }})</h4><br><br>
             {% endfor %}
         </aside>
         <section id="mostRecent">
+            <h2>Most Recent Items</h2>
+            {% for i in items %}
+                <h4 class="itemName">{{ i[0] }}&ensp;</h4>
+                <h5 class="itemNameCat">({{ i[1] }})</h5><br>
+            {% endfor %}
         </section>
     </body>
 </html>

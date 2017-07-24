@@ -20,8 +20,9 @@ app = Flask(__name__, template_folder='pageDir', static_folder='pageDir')
 def main():
     categories = session.query(ItemCat.category, func.count(ItemCat.category))\
                  .group_by(ItemCat.category)
-    return render_template('home.html', categories=categories)
+    items = session.query(ItemCat.name, ItemCat.category).limit(10)
+    return render_template('home.html', categories=categories, items=items)
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8080)
