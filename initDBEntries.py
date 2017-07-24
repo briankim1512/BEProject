@@ -38,13 +38,13 @@ session.commit()
 
 item5 = ItemCat(name="Laptop", category="Computers",
                 description="A laptop with a 2 core CPU and integrated " +
-                "graphics. Contains 500 GB of storage and 4 GB of ram " +
+                "graphics. Contains 500 GB of storage and 4 GB of ram. " +
                 "Extremely portable form and weighs 2 kg.")
 session.add(item5)
 session.commit()
 
 item6 = ItemCat(name="Earphones", category="Audio Equipment",
-                description="An earphone with 3 drivers on each channel " +
+                description="An earphone with 3 drivers on each channel. " +
                 "Made with precise German engineering.")
 session.add(item6)
 session.commit()

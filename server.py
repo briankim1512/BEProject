@@ -13,15 +13,22 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 # Initialization for Flask server
-app = Flask(__name__, template_folder='pageDir', static_folder='pageDir')
+app = Flask(__name__, template_folder='webDir', static_folder='webDir')
 
 
 @app.route('/')
 def main():
     categories = session.query(ItemCat.category, func.count(ItemCat.category))\
                  .group_by(ItemCat.category)
-    items = session.query(ItemCat.name, ItemCat.category).limit(10)
-    return render_template('home.html', categories=categories, items=items)
+    items = session.query(ItemCat.name, ItemCat.category, ItemCat.id).limit(10)
+    return render_template('index.html', categories=categories, items=items)
+
+
+@app.route('/item/<int:itemId>')
+def itemDesc(itemId):
+    description = session.query(ItemCat.name, ItemCat.description)\
+                  .filter(ItemCat.id==itemId).first()
+    return render_template('itemDesc/index.html', description=description)
 
 if __name__ == '__main__':
     app.debug = True

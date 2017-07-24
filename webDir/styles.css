@@ -8,6 +8,7 @@ header{
     margin-left: -45%;
     background-color: #191919;
     position: fixed;
+    top: 0%;
     width: 90%;
     left: 50%;
 }
@@ -60,4 +61,11 @@ aside{
 .itemNameCat{
     display: inline;
     color: #AAAAAA;
+}
+.link{
+    color: #FFFFFF;
+    text-decoration: None;
+}
+.link:hover{
+    text-decoration: underline;
 }

@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Item Catalogue</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='itemDesc/styles.css') }}">
+    </head>
+    <body>
+        <header>
+            <h1 id="title">Item Catalogue</h1>
+            <a href="#"><button id="login">LOGIN</button></a>
+        </header>
+        <section id="mainSection">
+            <div id="itemContent">
+                <h1 id="itemTitle">{{ description[0] }}</h1>
+                <h3 id="itemDesc">{{ description[1] }}</h3>
+            </div>
+        </section>
+    </body>
+</html>
