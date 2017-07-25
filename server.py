@@ -26,9 +26,15 @@ def main():
 
 @app.route('/item/<int:itemId>')
 def itemDesc(itemId):
-    description = session.query(ItemCat.name, ItemCat.description)\
-                  .filter(ItemCat.id==itemId).first()
+    description = session.query(ItemCat.name, ItemCat.category,\
+                  ItemCat.description).filter(ItemCat.id==itemId).first()
     return render_template('itemDesc/index.html', description=description)
+
+
+@app.route('/categories/<string:catId>')
+def catItems(catId):
+    items = session.query(ItemCat.name, ItemCat.id).filter(ItemCat.category==catId)
+    return render_template('catItems/index.html', items=items, catId=catId)
 
 if __name__ == '__main__':
     app.debug = True

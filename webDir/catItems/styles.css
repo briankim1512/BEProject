@@ -39,18 +39,6 @@ header{
     background-color: #222222;
     height: 70%;
 }
-#itemTitle{
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-#itemCat{
-    font-weight: normal;
-    color: #AAAAAA;
-    margin-top: 0px;
-}
-#itemDesc{
-    font-weight: normal;
-}
 #itemContent{
     padding: 25px;
 }

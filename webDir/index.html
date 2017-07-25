@@ -12,14 +12,16 @@
         <aside>
             <h2>Categories</h2>
             {% for i in categories %}
-            <h4 class="itemCate">{{ i[0] }}({{ i[1] }})</h4><br><br>
+            <a href="{{ url_for('catItems', catId=i[0]) }}" class="link">
+                <h4 class="itemCate">{{ i[0] }}({{ i[1] }})</h4><br><br>
+            </a>
             {% endfor %}
         </aside>
         <section id="mostRecent">
             <h2>Most Recent Items</h2>
             {% for i in items %}
                 <a href="{{ url_for('itemDesc', itemId=i[2]) }}" class="link">
-                    <h4 class="itemName">{{ i[0] }}&ensp;</h4>
+                    <h4 class="itemName">{{ i[0] }}</h4>
                 </a>
                 <h5 class="itemNameCat">({{ i[1] }})</h5><br>
             {% endfor %}

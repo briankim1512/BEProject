@@ -2,7 +2,7 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Item Catalogue</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='itemDesc/styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='catItems/styles.css') }}">
     </head>
     <body>
         <header>
@@ -13,11 +13,12 @@
         </header>
         <section id="mainSection">
             <div id="itemContent">
-                <h1 id="itemTitle">{{ description[0] }}</h1>
-                <a href="{{ url_for('catItems', catId=description[1]) }}" class="link">
-                    <h5 id="itemCat">{{ description[1] }}</h5>
+                <h1>{{ catId }}</h1>
+                {% for i in items %}
+                <a href="{{ url_for('itemDesc', itemId=i[1]) }}" class="link">
+                    <h4>{{ i[0] }}</h4>
                 </a>
-                <h3 id="itemDesc">{{ description[2] }}</h3>
+                {% endfor %}
             </div>
         </section>
     </body>
