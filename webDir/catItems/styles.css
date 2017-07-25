@@ -32,6 +32,9 @@ header{
     margin-top: 10px;
     margin-bottom: 10px;
 }
+#catTitle{
+    margin-top: 0px;
+}
 #mainSection{
     margin: auto;
     width: 90%;

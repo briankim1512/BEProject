@@ -13,7 +13,7 @@
         </header>
         <section id="mainSection">
             <div id="itemContent">
-                <h1>{{ catId }}</h1>
+                <h1 id="catTitle">{{ catId }}</h1>
                 {% for i in items %}
                 <a href="{{ url_for('itemDesc', itemId=i[1]) }}" class="link">
                     <h4>{{ i[0] }}</h4>

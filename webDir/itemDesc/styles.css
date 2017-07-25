@@ -54,6 +54,9 @@ header{
 #itemContent{
     padding: 25px;
 }
+#editLink{
+    padding-right: 5px;
+}
 .link{
     color: #FFFFFF;
     text-decoration: None;
