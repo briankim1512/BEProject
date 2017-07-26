@@ -56,6 +56,8 @@ def catItems(catId):
 def itemDesc(itemId):
     description = session.query(ItemCat.name, ItemCat.category,
                   ItemCat.description).filter(ItemCat.id==itemId).first()
+    if description==None:
+        abort(404)
     return render_template('itemDesc/index.html', description=description,
                            itemId=itemId)
 
@@ -75,7 +77,8 @@ def modItem(itemId, mod):
                                    description=description,
                                    categories=categories)
         elif mod=='delete':
-            return render_template('itemDesc/delItem/index.html')
+            return render_template('itemDesc/delItem/index.html',
+                                   itemId=itemId)
         else:
             abort(404)
     if request.method=='POST':
@@ -86,6 +89,11 @@ def modItem(itemId, mod):
             item.description = request.form['description']
             session.commit()
             return redirect(url_for('itemDesc', itemId=itemId))
+        elif mod=='delete':
+            item = session.query(ItemCat).filter(ItemCat.id==itemId).first()
+            session.delete(item)
+            session.commit()
+            return redirect(url_for('main'))
 
 if __name__ == '__main__':
     app.debug = True

@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Item Catalogue</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='itemDesc/delItem/styles.css') }}">
+    </head>
+    <body>
+        <header>
+            <a href="/" class="link">
+                <h1 id="title">Item Catalogue</h1>
+            </a>
+            <a href="#"><button id="login">LOGIN</button></a>
+        </header>
+        <section id="mainSection">
+            <div id="itemContent">
+                <h1 id="itemTitle">Really delete this item?</h1>
+                <form action="{{ url_for('modItem', itemId=itemId, mod='delete') }}" method="post">
+                    <input type="submit" value="Delete">
+                </form>
+            </div>
+        </section>
+    </body>
+</html>

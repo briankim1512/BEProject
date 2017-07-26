@@ -12,14 +12,6 @@ header{
     width: 90%;
     left: 50%;
 }
-aside{
-    float: left;
-    margin-left: 5%;
-    margin-top: 85px;
-    background-color: #222222;
-    width: 30%;
-    height: 100%;
-}
 #login{
     float: right;
     margin-right: 5%;
@@ -40,22 +32,18 @@ aside{
     margin-top: 10px;
     margin-bottom: 10px;
 }
-#catTitle{
-    margin-top: 0px;
-}
 #mainSection{
-    float: right;
-    width: 60%;
+    margin: auto;
+    width: 90%;
     margin-top: 85px;
-    margin-right: 5%;
-    background-color: #111111;
-    height: 100%;
+    background-color: #222222;
+    height: 70%;
 }
 #itemContent{
     padding: 25px;
 }
-.itemCate{
-    display: inline;
+#itemTitle{
+    margin-top: 0px;
 }
 .link{
     color: #FFFFFF;
