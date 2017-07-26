@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Item Catalogue</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='itemDesc/editItem/styles.css') }}">
+    </head>
+    <body>
+        <header>
+            <a href="/" class="link">
+                <h1 id="title">Item Catalogue</h1>
+            </a>
+            <a href="#"><button id="login">LOGIN</button></a>
+        </header>
+        <section id="mainSection">
+            <div id="itemContent">
+                <h1 id="itemTitle">Edit this item</h1>
+                <form action="{{ url_for('modItem', itemId=itemId, mod='edit') }}" method="post">
+                    <p>Name</p>
+                        <input type="text" size="20" name="name" value="{{ description[0] }}">
+                        <br>
+                    <p>Category</p>
+                        <select name="category">
+                            {% for i in categories %}
+                                {% if i[0]==description[1] %}
+                                    <option value="{{ i[0] }}" selected="selected">{{ i[0] }}</option>
+                                {% else %}
+                                    <option value="{{ i[0] }}">{{ i[0] }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    <p>Description</p>
+                        <textarea name="description" rows="5" cols="50">{{ description[2] }}</textarea>
+                    <br><br>
+                    <input type="submit" value="Edit">
+                </form>
+            </div>
+        </section>
+    </body>
+</html>

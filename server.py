@@ -54,14 +54,38 @@ def catItems(catId):
 # The page that returns the item category and description
 @app.route('/item/<int:itemId>')
 def itemDesc(itemId):
-    description = session.query(ItemCat.name, ItemCat.category,\
+    description = session.query(ItemCat.name, ItemCat.category,
                   ItemCat.description).filter(ItemCat.id==itemId).first()
-    return render_template('itemDesc/index.html', description=description)
+    return render_template('itemDesc/index.html', description=description,
+                           itemId=itemId)
 
 # This page allows the user to edit or delete the selected item
 @app.route('/item/<int:itemId>/<string:mod>', methods=['GET', 'POST'])
 def modItem(itemId, mod):
-    pass
+    if request.method=='GET':
+        if mod=='edit':
+            description = session.query(ItemCat.name, ItemCat.category,
+                          ItemCat.description).filter(ItemCat.id==itemId)\
+                          .first()
+            categories = session.query(ItemCat.category,
+                         func.count(ItemCat.category))\
+                         .group_by(ItemCat.category)
+            return render_template('itemDesc/editItem/index.html',
+                                   itemId=itemId,
+                                   description=description,
+                                   categories=categories)
+        elif mod=='delete':
+            return render_template('itemDesc/delItem/index.html')
+        else:
+            abort(404)
+    if request.method=='POST':
+        if mod=='edit':
+            item = session.query(ItemCat).filter(ItemCat.id==itemId).first()
+            item.name = request.form['name']
+            item.category = request.form['category']
+            item.description = request.form['description']
+            session.commit()
+            return redirect(url_for('itemDesc', itemId=itemId))
 
 if __name__ == '__main__':
     app.debug = True
