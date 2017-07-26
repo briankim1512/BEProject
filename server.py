@@ -44,8 +44,10 @@ def newItem():
 # The page that returns the items of the desired category
 @app.route('/categories/<string:catId>')
 def catItems(catId):
+    # Hard-coded the "All Items" category since it doesn't exist in the DB
     if catId == "All Items":
         items = session.query(ItemCat.name, ItemCat.id)
+    # This is for the categories that the link provides
     else:
         items = session.query(ItemCat.name, ItemCat.id)\
                 .filter(ItemCat.category == catId)
@@ -61,6 +63,7 @@ def itemDesc(itemId):
     description = session.query(ItemCat.name, ItemCat.category,
                                 ItemCat.description)\
                                 .filter(ItemCat.id == itemId).first()
+    # Makes sure that there is data from the itemId provided
     if description is None:
         abort(404)
     return render_template('itemDesc/index.html', description=description,
@@ -71,6 +74,7 @@ def itemDesc(itemId):
 @app.route('/item/<int:itemId>/<string:mod>', methods=['GET', 'POST'])
 def modItem(itemId, mod):
     if request.method == 'GET':
+        # Creates a form from the itemId provided
         if mod == 'edit':
             description = session.query(ItemCat.name, ItemCat.category,
                                         ItemCat.description)\
@@ -82,12 +86,14 @@ def modItem(itemId, mod):
                                    itemId=itemId,
                                    description=description,
                                    categories=categories)
+        # Makes sure that the user wants to delete the item
         elif mod == 'delete':
             return render_template('itemDesc/delItem/index.html',
                                    itemId=itemId)
         else:
             abort(404)
     if request.method == 'POST':
+        # Edits sql entry based on the form provided
         if mod == 'edit':
             item = session.query(ItemCat).filter(ItemCat.id == itemId).first()
             item.name = request.form['name']
@@ -95,6 +101,7 @@ def modItem(itemId, mod):
             item.description = request.form['description']
             session.commit()
             return redirect(url_for('itemDesc', itemId=itemId))
+        # Deletes the sql entry from the link provided
         elif mod == 'delete':
             item = session.query(ItemCat).filter(ItemCat.id == itemId).first()
             session.delete(item)
