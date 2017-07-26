@@ -115,9 +115,9 @@ def jsonCat():
     results = session.query(ItemCat)
     items = {}
     for i in results:
-        items.update({i.name:{}})
-        item = {"id":i.id, "category":i.category,\
-                "description":i.description}
+        items.update({i.name: {}})
+        item = {"id": i.id, "category": i.category,
+                "description": i.description}
         items[i.name].update(item)
     return jsonify(items)
 
