@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from DBSetup import Base, ItemCat
 # Import server related modules
 from flask import Flask, render_template, abort,\
-    url_for, request, redirect
+    url_for, request, redirect, jsonify
 
 # Create a SQL session
 engine = create_engine('sqlite:///itemcat.db')
@@ -107,6 +107,19 @@ def modItem(itemId, mod):
             session.delete(item)
             session.commit()
             return redirect(url_for('main'))
+
+
+# This route provides the JSON file for others to use
+@app.route('/catalog.json')
+def jsonCat():
+    results = session.query(ItemCat)
+    items = {}
+    for i in results:
+        items.update({i.name:{}})
+        item = {"id":i.id, "category":i.category,\
+                "description":i.description}
+        items[i.name].update(item)
+    return jsonify(items)
 
 if __name__ == '__main__':
     app.debug = True
