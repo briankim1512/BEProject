@@ -148,11 +148,13 @@ def showLogin():
 # This route provides the callback from the google auth
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    # Validate state token and returns a response if not
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-
+    
+    # Trying to upgrade auth code to credentials object
     code = request.data
     try:
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
@@ -163,12 +165,15 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    # If successful, the following code will make sure the token is valid
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
         % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
 
+    # If there was an error or if the token isn't for the intended user,
+    # the code will return a error to the front-end
     if result.get('error') is not None:
         response = make_response(json.dumps(result.get('error')), 50)
         response.header['Content-Type'] = 'application/json'
@@ -180,6 +185,8 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    # Make sure that this is a fresh login, else just send the user along
+    # their way
     stored_credentials = login_session.get('credentials')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_credentials is not None and gplus_id == stored_gplus_id:
@@ -187,22 +194,20 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    # Storing the credentials object and gplus_id for auth later on
     login_session['credentials'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
 
+    # Getting user information
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
     data = json.loads(answer.text)
 
+    # Assigning user information to session cookie
     login_session['username'] = data["name"]
     login_session['picture'] = data["picture"]
     login_session['email'] = data["email"]
-
-    output = ''
-    output += login_session['username']
-
-    return output
 
 if __name__ == '__main__':
     app.secret_key = "OIHFG4HOP398HFLKJ43HT2498"
