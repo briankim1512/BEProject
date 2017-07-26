@@ -52,7 +52,7 @@ def newItem():
     if request.method == 'GET':
         categories = session.query(ItemCat.category).group_by(ItemCat.category)
         if 'username' not in login_session:
-            logState=['/login', 'LOGIN']
+            return redirect('/login')
         else:
             logState=['/gdisconnect', 'LOGOUT']
         return render_template('newItem/index.html', categories=categories,
@@ -116,7 +116,7 @@ def modItem(itemId, mod):
                                        func.count(ItemCat.category))\
                                 .group_by(ItemCat.category)
             if 'username' not in login_session:
-                logState=['/login', 'LOGIN']
+                return redirect('/login')
             else:
                 logState=['/gdisconnect', 'LOGOUT']
             return render_template('itemDesc/editItem/index.html',
@@ -127,7 +127,7 @@ def modItem(itemId, mod):
         # Makes sure that the user wants to delete the item
         elif mod == 'delete':
             if 'username' not in login_session:
-                logState=['/login', 'LOGIN']
+                return redirect('/login')
             else:
                 logState=['/gdisconnect', 'LOGOUT']
             return render_template('itemDesc/delItem/index.html',
