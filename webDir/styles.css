@@ -49,6 +49,10 @@ aside{
     margin-top: 10px;
     margin-bottom: 10px;
 }
+#addLink{
+    margin-top: 0px;
+    color: #AAAAAA;
+}
 .center{
     margin: auto;
 }

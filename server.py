@@ -33,8 +33,14 @@ def itemDesc(itemId):
 
 @app.route('/categories/<string:catId>')
 def catItems(catId):
-    items = session.query(ItemCat.name, ItemCat.id).filter(ItemCat.category==catId)
-    return render_template('catItems/index.html', items=items, catId=catId)
+    if catId=="All Items":
+        items = session.query(ItemCat.name, ItemCat.id)
+    else:
+        items = session.query(ItemCat.name, ItemCat.id).filter(ItemCat.category==catId)
+    categories = session.query(ItemCat.category, func.count(ItemCat.category))\
+                 .group_by(ItemCat.category)
+    return render_template('catItems/index.html', items=items, catId=catId,\
+                           categories=categories)
 
 if __name__ == '__main__':
     app.debug = True

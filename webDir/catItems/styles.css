@@ -12,6 +12,14 @@ header{
     width: 90%;
     left: 50%;
 }
+aside{
+    float: left;
+    margin-left: 5%;
+    margin-top: 85px;
+    background-color: #222222;
+    width: 30%;
+    height: 70%;
+}
 #login{
     float: right;
     margin-right: 5%;
@@ -36,14 +44,18 @@ header{
     margin-top: 0px;
 }
 #mainSection{
-    margin: auto;
-    width: 90%;
+    float: right;
+    width: 60%;
     margin-top: 85px;
-    background-color: #222222;
+    margin-right: 5%;
+    background-color: #111111;
     height: 70%;
 }
 #itemContent{
     padding: 25px;
+}
+.itemCate{
+    display: inline;
 }
 .link{
     color: #FFFFFF;
