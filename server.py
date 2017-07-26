@@ -39,9 +39,9 @@ def main():
     items = session.query(ItemCat.name, ItemCat.category, ItemCat.id)\
         .order_by(ItemCat.id.desc()).limit(10)
     if 'username' not in login_session:
-        logState=['/login', 'LOGIN']
+        logState = ['/login', 'LOGIN']
     else:
-        logState=['/gdisconnect', 'LOGOUT']
+        logState = ['/gdisconnect', 'LOGOUT']
     return render_template('index.html', categories=categories, items=items,
                            logState=logState)
 
@@ -54,7 +54,7 @@ def newItem():
         if 'username' not in login_session:
             return redirect('/login')
         else:
-            logState=['/gdisconnect', 'LOGOUT']
+            logState = ['/gdisconnect', 'LOGOUT']
         return render_template('newItem/index.html', categories=categories,
                                logState=logState)
     if request.method == 'POST':
@@ -79,9 +79,9 @@ def catItems(catId):
     categories = session.query(ItemCat.category, func.count(ItemCat.category))\
         .group_by(ItemCat.category)
     if 'username' not in login_session:
-        logState=['/login', 'LOGIN']
+        logState = ['/login', 'LOGIN']
     else:
-        logState=['/gdisconnect', 'LOGOUT']
+        logState = ['/gdisconnect', 'LOGOUT']
     return render_template('catItems/index.html', items=items, catId=catId,
                            categories=categories, logState=logState)
 
@@ -96,9 +96,9 @@ def itemDesc(itemId):
     if description is None:
         abort(404)
     if 'username' not in login_session:
-        logState=['/login', 'LOGIN']
+        logState = ['/login', 'LOGIN']
     else:
-        logState=['/gdisconnect', 'LOGOUT']
+        logState = ['/gdisconnect', 'LOGOUT']
     return render_template('itemDesc/index.html', description=description,
                            itemId=itemId, logState=logState)
 
@@ -118,7 +118,7 @@ def modItem(itemId, mod):
             if 'username' not in login_session:
                 return redirect('/login')
             else:
-                logState=['/gdisconnect', 'LOGOUT']
+                logState = ['/gdisconnect', 'LOGOUT']
             return render_template('itemDesc/editItem/index.html',
                                    itemId=itemId,
                                    description=description,
@@ -129,7 +129,7 @@ def modItem(itemId, mod):
             if 'username' not in login_session:
                 return redirect('/login')
             else:
-                logState=['/gdisconnect', 'LOGOUT']
+                logState = ['/gdisconnect', 'LOGOUT']
             return render_template('itemDesc/delItem/index.html',
                                    itemId=itemId, logState=logState)
         else:
@@ -174,6 +174,9 @@ def showLogin():
 
 
 # This route provides the callback from the google auth
+# The following code was repurposed from:
+# https://github.com/udacity/ud330/blob/master/Lesson2/step5/project.py
+# Thanks to Lorenzo for giving the template to work from
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token and returns a response if not
@@ -241,6 +244,9 @@ def gconnect():
 
 
 # Route for disconnecting a user from the webapp
+# The following code was repurposed from:
+# https://github.com/udacity/ud330/blob/master/Lesson2/step6/project.py
+# Thanks to Lorenzo for giving this template to work from
 @app.route('/gdisconnect')
 def gdisconnect():
     # Make sure the web disconnects the connected user, not everyone
