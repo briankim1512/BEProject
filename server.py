@@ -38,7 +38,12 @@ def main():
                  .group_by(ItemCat.category)
     items = session.query(ItemCat.name, ItemCat.category, ItemCat.id)\
         .order_by(ItemCat.id.desc()).limit(10)
-    return render_template('index.html', categories=categories, items=items)
+    if 'username' not in login_session:
+        logState=['/login', 'LOGIN']
+    else:
+        logState=['/gdisconnect', 'LOGOUT']
+    return render_template('index.html', categories=categories, items=items,
+                           logState=logState)
 
 
 # The page that allows the registered user to create a new item
@@ -238,7 +243,7 @@ def gdisconnect():
         del login_session['picture']
         response = make_response(json.dumps('Successfully Disconnected'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return redirect(url_for('main'))
 
     # If something else happened, send the an error message to the user
     else:
