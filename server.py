@@ -8,7 +8,8 @@ from flask import Flask, render_template, abort,\
 from flask import session as login_session
 
 # Import Auth related modules
-import random, string
+import random
+import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -153,7 +154,7 @@ def gconnect():
         response = make_response(json.dumps('Invalid state parameter'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    
+
     # Trying to upgrade auth code to credentials object
     code = request.data
     try:
@@ -168,7 +169,7 @@ def gconnect():
     # If successful, the following code will make sure the token is valid
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
-        % access_token)
+           % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
 
@@ -181,7 +182,7 @@ def gconnect():
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
         response = make_response(json.dumps("Token's user ID doesn't match"),
-                401)
+                                 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -221,7 +222,7 @@ def gdisconnect():
         response = make_response(json.dumps('Current user not connected'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    
+
     # Revoke the current token from session
     access_token = credentials
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
@@ -238,7 +239,7 @@ def gdisconnect():
         response = make_response(json.dumps('Successfully Disconnected'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
-    
+
     # If something else happened, send the an error message to the user
     else:
         response = make_response(json.dumps('Something went wrong...'), 400)
