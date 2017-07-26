@@ -38,5 +38,5 @@ To run the server, run:
 python server.py
 ```
 
-into the server and connect to the server by using your localhost IP and
-port 8080
+into the terminal and connect to the server by using your localhost IP and
+port 8080. (Make sure you're doing this through the vagrant ssh instance.)
