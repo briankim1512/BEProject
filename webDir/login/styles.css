@@ -1,0 +1,73 @@
+html{
+    height: 100%;
+}
+body{
+    margin-top: 0px;
+    background-color: #333333;
+    color: #FFFFFF;
+    font-family: sans-serif;
+    height: 100%;
+}
+header{
+    margin-left: -45%;
+    background-color: #191919;
+    position: fixed;
+    top: 0%;
+    width: 90%;
+    left: 50%;
+}
+#login{
+    float: right;
+    margin-right: 5%;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #000000;
+    font-size: 100%;
+    font-weight: bold;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 3px;
+    color: #FFFFFF;
+}
+#title{
+    font-size: 250%;
+    padding-left: 5%;
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#mainSection{
+    margin: auto;
+    width: 90%;
+    margin-top: 85px;
+    background-color: #222222;
+    height: 70%;
+}
+#itemTitle{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#itemCat{
+    font-weight: normal;
+    color: #AAAAAA;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#itemDesc{
+    font-weight: normal;
+}
+#itemContent{
+    margin: auto;
+    padding: 25px;
+    width: 120px;
+}
+#editLink{
+    padding-right: 5px;
+}
+.link{
+    color: #FFFFFF;
+    text-decoration: None;
+}
+.link:hover{
+    text-decoration: underline;
+}

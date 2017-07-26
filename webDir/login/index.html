@@ -1,50 +1,61 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Item Catalogue</title>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+        <script src="//apis.google.com/js/platform.js?onload=start"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='login/styles.css') }}">
     </head>
-    <body>   
-        <div id="signInButton">
-            <span class="g-signin"
-            data-scope="openid email"
-            data-clientid="267133608937-dk2p1baecr2r3uejkavq7418vnmei2a3.apps.googleusercontent.com"
-            data-redirecturi="postmessage"
-            data-accesstype="offline"
-            data-cookiepolicy="single_host_origin"
-            data-callback="signInCallback"
-            data-approvalprompt="force">
-            </span>
-        </div>
-        <div id="result"></div>
-        <script>
-            function signInCallback(authResult) {
-                if(authResult['code']) {
-                    $('#signinButton').attr('style', 'display:none');
-                    $.ajax({
-                        type: 'POST',
-                        url: '/gconnect?state={{STATE}}',
-                        processData: false,
-                        contentType: 'application/octet-stream; charset=utf-8',
-                        data: authResult['code'],
-                        success: function(result) {
-                            if (result) {
-                                $('#result').html('Login Successful!<br>'+
-                                result+ '<br>Redirecting...')
-                                setTimeout(function() {
-                                    window.location.href= "/";
-                                }, 4000);
-                            }
-                            else if (authResult['error']) {
-                                console.log('There was an error: ' + authResult['error']);
-                            }
-                            else {
-                                $('#result').html('Failed spectacularly');
+    <body>
+        <header>
+            <a href="/" class="link">
+                <h1 id="title">Item Catalogue</h1>
+            </a>
+        </header>
+        <section id="mainSection">
+            <div id="itemContent">
+                <div id="signInButton">
+                    <span class="g-signin"
+                    data-scope="openid email"
+                    data-clientid="267133608937-dk2p1baecr2r3uejkavq7418vnmei2a3.apps.googleusercontent.com"
+                    data-redirecturi="postmessage"
+                    data-accesstype="offline"
+                    data-cookiepolicy="single_host_origin"
+                    data-callback="signInCallback"
+                    data-approvalprompt="force">
+                    </span>
+                </div>
+                <div id="result"></div>
+                    <script>
+                        function signInCallback(authResult) {
+                            if(authResult['code']) {
+                                $('#signinButton').attr('style', 'display:none');
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/gconnect?state={{STATE}}',
+                                    processData: false,
+                                    contentType: 'application/octet-stream; charset=utf-8',
+                                    data: authResult['code'],
+                                    success: function(result) {
+                                        if (result) {
+                                            $('#result').html('Login Successful!<br>'+
+                                            result+ '<br>Redirecting...')
+                                            setTimeout(function() {
+                                                window.location.href= "/";
+                                                }, 4000);
+                                        }
+                                       else if (authResult['error']) {
+                                            console.log('There was an error: ' + authResult['error']);
+                                        }
+                                       else {
+                                            $('#result').html('Failed spectacularly');
+                                        }
+                                    }
+                                });
                             }
                         }
-                    });
-                }
-            }
-        </script>
+                    </script>
+                </div>
+        </section>
     </body>
   </html>
