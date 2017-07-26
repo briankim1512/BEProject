@@ -21,3 +21,16 @@ vagrant ssh
 ```
 
 into the terminal.
+
+
+Once complete, cd into /vagrant and run the python code "DBSetup.py" and 
+"initDBEntries.py" by typing:
+
+```
+python DBSetup.py
+python initDBEntries.py
+```
+
+into the terminal
+
+WARNING: ONLY EXECUTE initDBEntries.py ONCE OR ELSE YOU WILL GET DUPLICATES
