@@ -51,7 +51,12 @@ def main():
 def newItem():
     if request.method == 'GET':
         categories = session.query(ItemCat.category).group_by(ItemCat.category)
-        return render_template('newItem/index.html', categories=categories)
+        if 'username' not in login_session:
+            logState=['/login', 'LOGIN']
+        else:
+            logState=['/gdisconnect', 'LOGOUT']
+        return render_template('newItem/index.html', categories=categories,
+                               logState=logState)
     if request.method == 'POST':
         item = ItemCat(name=request.form['name'],
                        category=request.form['category'],
@@ -73,8 +78,12 @@ def catItems(catId):
                 .filter(ItemCat.category == catId)
     categories = session.query(ItemCat.category, func.count(ItemCat.category))\
         .group_by(ItemCat.category)
+    if 'username' not in login_session:
+        logState=['/login', 'LOGIN']
+    else:
+        logState=['/gdisconnect', 'LOGOUT']
     return render_template('catItems/index.html', items=items, catId=catId,
-                           categories=categories)
+                           categories=categories, logState=logState)
 
 
 # The page that returns the item category and description
@@ -86,8 +95,12 @@ def itemDesc(itemId):
     # Makes sure that there is data from the itemId provided
     if description is None:
         abort(404)
+    if 'username' not in login_session:
+        logState=['/login', 'LOGIN']
+    else:
+        logState=['/gdisconnect', 'LOGOUT']
     return render_template('itemDesc/index.html', description=description,
-                           itemId=itemId)
+                           itemId=itemId, logState=logState)
 
 
 # This page allows the user to edit or delete the selected item
@@ -102,14 +115,23 @@ def modItem(itemId, mod):
             categories = session.query(ItemCat.category,
                                        func.count(ItemCat.category))\
                                 .group_by(ItemCat.category)
+            if 'username' not in login_session:
+                logState=['/login', 'LOGIN']
+            else:
+                logState=['/gdisconnect', 'LOGOUT']
             return render_template('itemDesc/editItem/index.html',
                                    itemId=itemId,
                                    description=description,
-                                   categories=categories)
+                                   categories=categories,
+                                   logState=logState)
         # Makes sure that the user wants to delete the item
         elif mod == 'delete':
+            if 'username' not in login_session:
+                logState=['/login', 'LOGIN']
+            else:
+                logState=['/gdisconnect', 'LOGOUT']
             return render_template('itemDesc/delItem/index.html',
-                                   itemId=itemId)
+                                   itemId=itemId, logState=logState)
         else:
             abort(404)
     if request.method == 'POST':
