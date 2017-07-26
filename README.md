@@ -13,15 +13,12 @@ Vagrant: https://www.vagrantup.com/docs/installation/
 ```
 
 Once vagrant is installed or you already have vagrant, navigate to this directory
-where this file is located in and type:
+where this file is located in through a terminal and type:
 
 ```
 vagrant up
 vagrant ssh
 ```
-
-into the terminal.
-
 
 Once complete, cd into /vagrant and run the python code "DBSetup.py" and 
 "initDBEntries.py" by typing:
@@ -31,6 +28,15 @@ python DBSetup.py
 python initDBEntries.py
 ```
 
-into the terminal
-
 WARNING: ONLY EXECUTE initDBEntries.py ONCE OR ELSE YOU WILL GET DUPLICATES
+=============
+
+## Running the server
+To run the server, run:
+
+```
+python server.py
+```
+
+into the server and connect to the server by using your localhost IP and
+port 8080
