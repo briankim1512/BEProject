@@ -58,6 +58,8 @@ def newItem():
         return render_template('newItem/index.html', categories=categories,
                                logState=logState)
     if request.method == 'POST':
+        if 'username' not in login_session:
+            return redirect('/login')
         item = ItemCat(name=request.form['name'],
                        category=request.form['category'],
                        description=request.form['description'])
@@ -107,6 +109,8 @@ def itemDesc(itemId):
 @app.route('/item/<int:itemId>/<string:mod>', methods=['GET', 'POST'])
 def modItem(itemId, mod):
     if request.method == 'GET':
+        if 'username' not in login_session:
+                return redirect('/login')
         # Creates a form from the itemId provided
         if mod == 'edit':
             description = session.query(ItemCat.name, ItemCat.category,
@@ -115,10 +119,7 @@ def modItem(itemId, mod):
             categories = session.query(ItemCat.category,
                                        func.count(ItemCat.category))\
                                 .group_by(ItemCat.category)
-            if 'username' not in login_session:
-                return redirect('/login')
-            else:
-                logState = ['/gdisconnect', 'LOGOUT']
+            logState = ['/gdisconnect', 'LOGOUT']
             return render_template('itemDesc/editItem/index.html',
                                    itemId=itemId,
                                    description=description,
@@ -126,15 +127,14 @@ def modItem(itemId, mod):
                                    logState=logState)
         # Makes sure that the user wants to delete the item
         elif mod == 'delete':
-            if 'username' not in login_session:
-                return redirect('/login')
-            else:
-                logState = ['/gdisconnect', 'LOGOUT']
+            logState = ['/gdisconnect', 'LOGOUT']
             return render_template('itemDesc/delItem/index.html',
                                    itemId=itemId, logState=logState)
         else:
             abort(404)
     if request.method == 'POST':
+        if 'username' not in login_session:
+            return redirect('/login')
         # Edits sql entry based on the form provided
         if mod == 'edit':
             item = session.query(ItemCat).filter(ItemCat.id == itemId).first()
@@ -179,6 +179,10 @@ def showLogin():
 # Thanks to Lorenzo for giving the template to work from
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """
+    Gathers data from Google Sign in API and places it inside the session
+    (Thanks udacity reviewer!)
+    """
     # Validate state token and returns a response if not
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter'), 401)
