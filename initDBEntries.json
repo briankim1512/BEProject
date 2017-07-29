@@ -1,0 +1,80 @@
+{
+    "categories": [
+        {
+            "name": "Screens",
+            "id": 1
+        },
+        {
+            "name": "Computers",
+            "id": 2
+        },
+        {
+            "name": "Computer Accessory",
+            "id": 3
+        },
+        {
+            "name": "Audio Equipment",
+            "id": 4
+        },
+        {
+            "name": "Electronics Accessories",
+            "id": 5
+        }
+    ],
+    "items": [
+        {
+            "name": "Monitor",
+            "description": "A standard 24 inch, 1920 by 1080 resolution monitor. It has a 60hz refresh rate and the panel is IPS.",
+            "categoryId": 1,
+            "creator": "admin"
+        },
+        {
+            "name": "Desktop",
+            "description": "A computer with a 4 core CPU and integrated graphics. Also contains 1 TB of storage and 8 GB of ram memory.",
+            "categoryId": 2,
+            "creator": "admin"
+        },
+        {
+            "name": "Keyboard",
+            "description": "A mechanical swith keyboard. The switches feature a clicky acoustic and tactile feedback.",
+            "categoryId": 3,
+            "creator": "admin"
+        },
+        {
+            "name": "Mouse",
+            "description": "A wireless mouse that uses a small dongle for connection. The mouse is also 'ergonomic' and fits nicely to the hand.",
+            "categoryId": 3,
+            "creator": "admin"
+        },
+        {
+            "name": "Laptop",
+            "description": "A laptop with a 2 core CPU and integrated graphics. Contains 500 GB of storage and 4 GB of ram. Extremely portable form and weighs 2 kg.",
+            "categoryId": 2,
+            "creator": "admin"
+        },
+        {
+            "name": "Earphones",
+            "description": "An earphone with 3 drivers on each channel. Made with precise German engineering.",
+            "categoryId": 4,
+            "creator": "admin"
+        },
+        {
+            "name": "External Harddrive",
+            "description": "A omni-directional microphone that allows recordings from any direction.",
+            "categoryId": 3,
+            "creator": "admin"
+        },
+        {
+            "name": "Battery Backup",
+            "description": "A massive 50,000 mAh battery to charge almost anything you can throw at it.",
+            "categoryId": 5,
+            "creator": "admin"
+        },
+        {
+            "name": "Micro SD card",
+            "description": "A small data storage device that can be converted to fit any device IO.",
+            "categoryId": 5,
+            "creator": "admin"
+        }
+    ]
+}

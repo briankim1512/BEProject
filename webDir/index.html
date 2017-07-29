@@ -13,7 +13,7 @@
         <aside>
             <h2>Categories</h2>
             {% for i in categories %}
-            <a href="{{ url_for('catItems', catId=i[0]) }}" class="link">
+            <a href="{{ url_for('catItems', catId=i[2]) }}" class="link">
                 <h4 class="itemCate">{{ i[0] }}({{ i[1] }})</h4><br><br>
             </a>
             {% endfor %}

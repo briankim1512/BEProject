@@ -15,8 +15,8 @@
         <section id="mainSection">
             <div id="itemContent">
                 <h1 id="itemTitle">{{ description[0] }}</h1>
-                <a href="{{ url_for('catItems', catId=description[1]) }}" class="link">
-                    <h5 id="itemCat">{{ description[1] }}</h5>
+                <a href="{{ url_for('catItems', catId=categoryInfo[1]) }}" class="link">
+                    <h5 id="itemCat">{{ categoryInfo[0] }}</h5>
                 </a>
                 <a href="{{ url_for('modItem', itemId=itemId, mod='edit') }}" id="editLink" class="link">Edit</a>
                 <a href="{{ url_for('modItem', itemId=itemId, mod='delete') }}" class="link">Delete</a>

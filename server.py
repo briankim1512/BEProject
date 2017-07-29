@@ -1,12 +1,11 @@
 # Import SQL related modules
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from DBSetup import Base, ItemCat
+from DBSetup import Base, Item, Category
 # Import server related modules
 from flask import Flask, render_template, abort,\
     url_for, request, redirect, jsonify
 from flask import session as login_session
-
 # Import Auth related modules
 import random
 import string
@@ -34,10 +33,13 @@ app = Flask(__name__, template_folder='webDir', static_folder='webDir')
 # 'Home page' of the website that returns the categories and most recent items
 @app.route('/')
 def main():
-    categories = session.query(ItemCat.category, func.count(ItemCat.category))\
-                 .group_by(ItemCat.category)
-    items = session.query(ItemCat.name, ItemCat.category, ItemCat.id)\
-        .order_by(ItemCat.id.desc()).limit(10)
+    categories = session.query(Category.name, func.count(Item.categoryId),
+                               Item.categoryId).filter(
+                               Category.id == Item.categoryId)\
+                               .group_by(Category.name)
+    items = session.query(Item.name, Category.name, Item.id)\
+        .filter(Category.id == Item.categoryId).order_by(Item.id.desc())\
+        .limit(10)
     if 'username' not in login_session:
         logState = ['/login', 'LOGIN']
     else:
@@ -50,7 +52,8 @@ def main():
 @app.route('/newItem', methods=['GET', 'POST'])
 def newItem():
     if request.method == 'GET':
-        categories = session.query(ItemCat.category).group_by(ItemCat.category)
+        categories = session.query(Category.name, Category.id)\
+                     .group_by(Category.name)
         if 'username' not in login_session:
             return redirect('/login')
         else:
@@ -60,9 +63,10 @@ def newItem():
     if request.method == 'POST':
         if 'username' not in login_session:
             return redirect('/login')
-        item = ItemCat(name=request.form['name'],
-                       category=request.form['category'],
-                       description=request.form['description'])
+        item = Item(name=request.form['name'],
+                    categoryId=request.form['category'],
+                    description=request.form['description'],
+                    creator=login_session['username'])
         session.add(item)
         session.commit()
         return redirect(url_for('main'))
@@ -73,27 +77,34 @@ def newItem():
 def catItems(catId):
     # Hard-coded the "All Items" category since it doesn't exist in the DB
     if catId == "All Items":
-        items = session.query(ItemCat.name, ItemCat.id)
+        items = session.query(Item.name, Item.id)
+        categoryName = ["All Items"]
     # This is for the categories that the link provides
     else:
-        items = session.query(ItemCat.name, ItemCat.id)\
-                .filter(ItemCat.category == catId)
-    categories = session.query(ItemCat.category, func.count(ItemCat.category))\
-        .group_by(ItemCat.category)
+        items = session.query(Item.name, Item.id)\
+                .filter(Item.categoryId == catId)
+        categoryName = session.query(Category.name)\
+            .filter(Category.id == catId).first()
+    categories = session.query(Category.name, func.count(Item.categoryId),
+                               Item.categoryId)\
+        .filter(Category.id == Item.categoryId)\
+        .group_by(Category.name)
     if 'username' not in login_session:
         logState = ['/login', 'LOGIN']
     else:
         logState = ['/gdisconnect', 'LOGOUT']
     return render_template('catItems/index.html', items=items, catId=catId,
-                           categories=categories, logState=logState)
+                           categories=categories, logState=logState,
+                           categoryName=categoryName)
 
 
 # The page that returns the item category and description
 @app.route('/item/<int:itemId>')
 def itemDesc(itemId):
-    description = session.query(ItemCat.name, ItemCat.category,
-                                ItemCat.description)\
-                                .filter(ItemCat.id == itemId).first()
+    description = session.query(Item.name, Category.name,
+                                Item.description)\
+                                .filter(Category.id == Item.categoryId)\
+                                .filter(Item.id == itemId).first()
     # Makes sure that there is data from the itemId provided
     if description is None:
         abort(404)
@@ -101,24 +112,33 @@ def itemDesc(itemId):
         logState = ['/login', 'LOGIN']
     else:
         logState = ['/gdisconnect', 'LOGOUT']
+    categoryInfo = session.query(Category.name, Category.id)\
+        .filter(Item.id == itemId)\
+        .filter(Category.id == Item.categoryId).first()
     return render_template('itemDesc/index.html', description=description,
-                           itemId=itemId, logState=logState)
+                           itemId=itemId, logState=logState,
+                           categoryInfo=categoryInfo)
 
 
 # This page allows the user to edit or delete the selected item
 @app.route('/item/<int:itemId>/<string:mod>', methods=['GET', 'POST'])
 def modItem(itemId, mod):
     if request.method == 'GET':
+        # Verifies if the user is logged in and verifies again if the
+        # object that is under modification is made by the user
         if 'username' not in login_session:
                 return redirect('/login')
+        creator = session.query(Item.creator).filter(Item.id == itemId)\
+            .first()
+        if login_session['username'] != creator[0]:
+            abort(401)
         # Creates a form from the itemId provided
         if mod == 'edit':
-            description = session.query(ItemCat.name, ItemCat.category,
-                                        ItemCat.description)\
-                                        .filter(ItemCat.id == itemId).first()
-            categories = session.query(ItemCat.category,
-                                       func.count(ItemCat.category))\
-                                .group_by(ItemCat.category)
+            description = session.query(Item.name, Item.categoryId,
+                                        Item.description)\
+                                        .filter(Item.id == itemId).first()
+            categories = session.query(Category.name, Category.id)\
+                .group_by(Category.name)
             logState = ['/gdisconnect', 'LOGOUT']
             return render_template('itemDesc/editItem/index.html',
                                    itemId=itemId,
@@ -133,35 +153,45 @@ def modItem(itemId, mod):
         else:
             abort(404)
     if request.method == 'POST':
+        # Same verification process as in lines 127-128
         if 'username' not in login_session:
             return redirect('/login')
+        creator = session.query(Item.creator).filter(Item.id == itemId)\
+            .first()
+        if login_session['username'] != creator[0]:
+            abort(401)
         # Edits sql entry based on the form provided
         if mod == 'edit':
-            item = session.query(ItemCat).filter(ItemCat.id == itemId).first()
+            item = session.query(Item).filter(Item.id == itemId).first()
             item.name = request.form['name']
-            item.category = request.form['category']
+            item.categoryId = request.form['category']
             item.description = request.form['description']
             session.commit()
             return redirect(url_for('itemDesc', itemId=itemId))
         # Deletes the sql entry from the link provided
         elif mod == 'delete':
-            item = session.query(ItemCat).filter(ItemCat.id == itemId).first()
+            item = session.query(Item).filter(Item.id == itemId).first()
             session.delete(item)
             session.commit()
             return redirect(url_for('main'))
 
 
-# This route provides the JSON file for others to use
+# This route provides the JSON file for others to use.
+# This is made similarly to the initDBEntries so that users can also
+# Add their own mass entries too.
 @app.route('/catalog.json')
 def jsonCat():
-    results = session.query(ItemCat)
-    items = {}
-    for i in results:
-        items.update({i.name: {}})
-        item = {"id": i.id, "category": i.category,
+    cateRes = session.query(Category)
+    itemRes = session.query(Item)
+    result = {"categories": [], "items": []}
+    for i in cateRes:
+        category = {"name": i.name, "id": i.id}
+        result["categories"].append(category)
+    for i in itemRes:
+        item = {"name": i.name,  "id": i.id, "categoryId": i.categoryId,
                 "description": i.description}
-        items[i.name].update(item)
-    return jsonify(items)
+        result["items"].append(item)
+    return jsonify(result)
 
 
 # This route provides the login page for the user
@@ -244,7 +274,7 @@ def gconnect():
     login_session['picture'] = data["picture"]
     login_session['email'] = data["email"]
 
-    return 'Welcome'+login_session['username']
+    return 'Welcome '+login_session['username']
 
 
 # Route for disconnecting a user from the webapp
